@@ -1,4 +1,4 @@
-import { Datastore } from "./datastore";
+import { Datastore } from './datastore';
 
 declare global {
   interface Window {

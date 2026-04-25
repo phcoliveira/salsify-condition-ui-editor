@@ -17,5 +17,5 @@ export function initialize() {}
  */
 export default {
   name: 'datastore',
-  initialize
+  initialize,
 };

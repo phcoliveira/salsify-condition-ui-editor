@@ -11,8 +11,7 @@ export type Operator = Readonly<{
 }>;
 
 export type Property = Readonly<
-  { id: number; name: string }
-  & (
+  { id: number; name: string } & (
     | { type: 'string' | 'number' }
     | { type: 'enumerated'; values: string[] }
   )
