@@ -1,6 +1,6 @@
 {
   "extends": "@ember/app-tsconfig",
-  "include": ["app", "tests", "types"],
+  "include": ["app", "datastore.js", "tests", "types"],
   "compilerOptions": {
     "allowJs": true,
     "paths": {
