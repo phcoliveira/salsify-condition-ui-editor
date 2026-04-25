@@ -1,0 +1,13 @@
+# unconventional js
+/blueprints/*/files/
+
+# compiled output
+/dist/
+
+# misc
+/coverage/
+!.*
+.*/
+/package-lock.json
+ember-cli-update.json
+*.html
