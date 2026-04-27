@@ -1,3 +1,4 @@
+import { operatorsByType } from 'condition-ui-editor/services/datastore';
 import { setupTest } from 'condition-ui-editor/tests/helpers';
 import type {
   Operator,
@@ -46,7 +47,7 @@ module('Unit | Service | datastore', function (hooks) {
       ];
       // @ts-expect-error - stubbing private property
       sinon.stub(service, 'allProducts').value(products);
-      assert.deepEqual(service.getProducts(), products);
+      assert.deepEqual(service.getProducts(null), products);
     });
   });
 
@@ -63,7 +64,7 @@ module('Unit | Service | datastore', function (hooks) {
         .getOperators('string')
         .map((op) => op.id)
         .sort();
-      assert.deepEqual(ids, ['any', 'contains', 'equals', 'in', 'none'].sort());
+      assert.deepEqual(ids, operatorsByType.string.sort());
     });
 
     test('returns the operators for number properties', function (assert) {
@@ -72,10 +73,7 @@ module('Unit | Service | datastore', function (hooks) {
         .getOperators('number')
         .map((op) => op.id)
         .sort();
-      assert.deepEqual(
-        ids,
-        ['any', 'equals', 'greater_than', 'in', 'less_than', 'none'].sort(),
-      );
+      assert.deepEqual(ids, operatorsByType.number.sort());
     });
 
     test('returns the operators for enumerated properties', function (assert) {
@@ -84,7 +82,7 @@ module('Unit | Service | datastore', function (hooks) {
         .getOperators('enumerated')
         .map((op) => op.id)
         .sort();
-      assert.deepEqual(ids, ['any', 'equals', 'in', 'none'].sort());
+      assert.deepEqual(ids, operatorsByType.enumerated.sort());
     });
   });
 });

@@ -19,6 +19,6 @@ interface IndexSignature {
       rel="noopener noreferrer"
     >Paulo H. C. de Oliveira</a></p>
 
-  {{! This resolves to the route `application.products.index`. }}
+  {{! This resolves to the route `application.products.dashboard.index`. }}
   <LinkTo @route="products">Click here to see the products</LinkTo>
 </template> satisfies TOC<IndexSignature>;
