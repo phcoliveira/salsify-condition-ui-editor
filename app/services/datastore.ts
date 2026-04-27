@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 import type { Operator, Property } from 'condition-ui-editor/types/datastore';
 
-const operatorsByType: Record<Property['type'], Operator['id'][]> = {
+export const operatorsByType: Record<Property['type'], Operator['id'][]> = {
   enumerated: ['any', 'equals', 'in', 'none'],
   number: ['any', 'equals', 'greater_than', 'in', 'less_than', 'none'],
   string: ['any', 'contains', 'equals', 'in', 'none'],
@@ -33,9 +33,10 @@ export default class DatastoreService extends Service {
   }
 
   /**
-   * TODO: implement filter and sorting mechanism.
+   * TODO: implement filtering and sorting mechanism.
    */
-  getProducts() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getProducts(search: unknown) {
     return this.allProducts;
   }
 
