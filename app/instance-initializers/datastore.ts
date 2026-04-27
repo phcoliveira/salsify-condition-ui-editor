@@ -1,7 +1,5 @@
 import '../../datastore';
 
-export function initialize() {}
-
 /**
  * This may be an overkill for the current needs of the application, but I did
  * not want to modify the provided file `datastore.js`.
@@ -15,6 +13,8 @@ export function initialize() {}
  * application instance is created, thus guaranteeing that the window object
  * is properly populated before any component or service tries to access it.
  */
+export function initialize() {}
+
 export default {
   name: 'datastore',
   initialize,
