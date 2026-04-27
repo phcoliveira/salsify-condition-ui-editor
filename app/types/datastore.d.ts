@@ -1,12 +1,14 @@
+type OperatorId =
+  | 'any'
+  | 'contains'
+  | 'equals'
+  | 'greater_than'
+  | 'in'
+  | 'less_than'
+  | 'none';
+
 export type Operator = Readonly<{
-  id:
-    | 'equals'
-    | 'greater_than'
-    | 'less_than'
-    | 'any'
-    | 'none'
-    | 'in'
-    | 'contains';
+  id: OperatorId;
   text: string;
 }>;
 
