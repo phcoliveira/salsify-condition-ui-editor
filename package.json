@@ -93,5 +93,13 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "@frontile/theme": "^0.18.0-alpha.5",
+    "@tailwindcss/postcss": "^4.2.4",
+    "frontile": "^0.18.0-alpha.5",
+    "postcss": "^8.5.12",
+    "postcss-loader": "^8.2.1",
+    "tailwindcss": "^4.2.4"
   }
 }
