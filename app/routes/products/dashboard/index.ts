@@ -1,10 +1,10 @@
 import Route from '@ember/routing/route';
 import { service, type Registry } from '@ember/service';
+import { isTesting, macroCondition } from '@embroider/macros';
 import type {
   Model as DashboardModel,
   Params as DashboardParams,
 } from 'condition-ui-editor/routes/products/dashboard';
-import Ember from 'ember';
 
 export type Model = Readonly<
   DashboardModel & {
@@ -18,7 +18,7 @@ export default class ProductsDashboardIndexRoute extends Route<Model> {
 
   async model() {
     await new Promise((resolve) =>
-      setTimeout(resolve, Ember.testing ? 10 : 1000),
+      setTimeout(resolve, macroCondition(isTesting()) ? 1 : 500),
     );
 
     const params = this.paramsFor('products.dashboard') as DashboardParams;

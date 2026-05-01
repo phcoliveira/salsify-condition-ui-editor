@@ -2,8 +2,8 @@ import { array } from '@ember/helper';
 import { action } from '@ember/object';
 import { service, type Registry } from '@ember/service';
 import Component from '@glimmer/component';
-import type { Property } from 'condition-ui-editor/types/datastore';
-import { eq } from 'ember-truth-helpers';
+import type { OperatorId, Property } from 'condition-ui-editor/types/datastore';
+import { and, eq } from 'ember-truth-helpers';
 import { Button, Form, type FormResultData } from 'frontile';
 import * as v from 'valibot';
 
@@ -28,6 +28,11 @@ export interface Signature {
   };
   Element: HTMLDivElement;
 }
+
+export const selfSufficientOperators: string[] = [
+  'any',
+  'none',
+] satisfies OperatorId[];
 
 export default class ProductsDashboardFilters extends Component<Signature> {
   @service
@@ -76,6 +81,14 @@ export default class ProductsDashboardFilters extends Component<Signature> {
     if (this.selectedProperty?.type !== 'enumerated') return [];
 
     return this.selectedProperty.values;
+  }
+
+  get showPropertyValues() {
+    const { operatorId } = this.args.filters;
+
+    if (operatorId === undefined) return false;
+
+    return !selfSufficientOperators.includes(operatorId);
   }
 
   /**
@@ -236,7 +249,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
           NOTE: Unlike the 'operatorId', it is OK to keep the current value. So
           there is no need to rerender this block.
         }}
-        {{#if @filters.operatorId}}
+        {{#if (and this.showPropertyValues @filters.operatorId)}}
           {{#if (eq this.selectedProperty.type "enumerated")}}
             <form.Field @name="enumeratedValue" as |field|>
               <field.MultiSelect

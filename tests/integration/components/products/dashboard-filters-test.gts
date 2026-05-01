@@ -126,6 +126,40 @@ module(
       assert.dom(po.stringValue).doesNotExist();
     });
 
+    test('when the operator is `any`, no value input is rendered', async function (assert) {
+      const filters = { ...emptyFilters, propertyId: '1', operatorId: 'any' };
+
+      await render(
+        <template>
+          <DashboardFilters
+            @filters={{filters}}
+            @properties={{STRING_PROPERTIES}}
+          />
+        </template>,
+      );
+
+      assert.dom(po.enumeratedValue).doesNotExist();
+      assert.dom(po.numberValue).doesNotExist();
+      assert.dom(po.stringValue).doesNotExist();
+    });
+
+    test('when the operator is `none`, no value input is rendered', async function (assert) {
+      const filters = { ...emptyFilters, propertyId: '1', operatorId: 'none' };
+
+      await render(
+        <template>
+          <DashboardFilters
+            @filters={{filters}}
+            @properties={{STRING_PROPERTIES}}
+          />
+        </template>,
+      );
+
+      assert.dom(po.enumeratedValue).doesNotExist();
+      assert.dom(po.numberValue).doesNotExist();
+      assert.dom(po.stringValue).doesNotExist();
+    });
+
     module('given a selected operator — string property', function () {
       const filters = {
         ...emptyFilters,
