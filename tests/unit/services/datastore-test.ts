@@ -350,14 +350,14 @@ module('Unit | Service | datastore', function (hooks) {
       });
     });
 
-    test('when the operator requires a value but none is provided, returns no products', function (assert) {
+    test('when the operator requires a value but none is provided, returns all products', function (assert) {
       const service = this.owner.lookup('service:datastore');
 
       assert.deepEqual(
         service.getProducts(
           params({ propertyId: STRING_PROPERTY_ID, operatorId: 'equals' }),
         ),
-        [],
+        PRODUCTS,
       );
     });
   });
