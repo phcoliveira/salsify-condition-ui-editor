@@ -1,3 +1,7 @@
+import { Spinner } from 'frontile';
+
 <template>
-  <p>Loading</p>
+  <div class="grid place-content-center h-64">
+    <Spinner @size="xl" />
+  </div>
 </template>

@@ -1,18 +1,33 @@
 import Route from '@ember/routing/route';
 import { service, type Registry } from '@ember/service';
-import type { Params } from 'condition-ui-editor/routes/products/dashboard';
+import type {
+  Model as DashboardModel,
+  Params as DashboardParams,
+} from 'condition-ui-editor/routes/products/dashboard';
+import Ember from 'ember';
 
-export type Model = Readonly<{
-  products: ReturnType<Registry['datastore']['getProducts']>;
-}>;
+export type Model = Readonly<
+  DashboardModel & {
+    products: ReturnType<Registry['datastore']['getProducts']>;
+  }
+>;
 
 export default class ProductsDashboardIndexRoute extends Route<Model> {
   @service()
   declare readonly datastore: Registry['datastore'];
 
-  model() {
-    const params = this.paramsFor('products.dashboard') as Params;
+  async model() {
+    await new Promise((resolve) =>
+      setTimeout(resolve, Ember.testing ? 10 : 1000),
+    );
+
+    const params = this.paramsFor('products.dashboard') as DashboardParams;
+    const dashboardModel = this.modelFor(
+      'products.dashboard',
+    ) as DashboardModel;
+
     return {
+      ...dashboardModel,
       products: this.datastore.getProducts(params),
     };
   }
