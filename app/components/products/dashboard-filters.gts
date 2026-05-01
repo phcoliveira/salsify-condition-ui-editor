@@ -24,7 +24,7 @@ export interface Signature {
     properties: Property[];
   };
   Blocks: {
-    default: []
+    default: [];
   };
   Element: HTMLDivElement;
 }
@@ -40,7 +40,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
     if (propertyId === undefined) return undefined;
 
     const property = properties.find(
-      (property) => property.id.toString() === propertyId
+      (property) => property.id.toString() === propertyId,
     );
 
     // The only case I could think of is when a user manually edits the URL,
@@ -58,17 +58,18 @@ export default class ProductsDashboardFilters extends Component<Signature> {
   }
 
   get properties() {
-    return this.args.properties.map(
-      (property) => ({ id: property.id.toString(), name: property.name })
-    )
+    return this.args.properties.map((property) => ({
+      id: property.id.toString(),
+      name: property.name,
+    }));
   }
 
   get operators() {
     if (this.selectedProperty === undefined) return [];
 
-    return this.datastore.getOperators(this.selectedProperty.type).map(
-      (operator) => ({ id: operator.id, name: operator.text })
-    );
+    return this.datastore
+      .getOperators(this.selectedProperty.type)
+      .map((operator) => ({ id: operator.id, name: operator.text }));
   }
 
   get enumeratedItems() {
@@ -92,8 +93,8 @@ export default class ProductsDashboardFilters extends Component<Signature> {
         numberValue: undefined,
         enumeratedValue: undefined,
       },
-      false
-    )
+      false,
+    );
   }
 
   /**
@@ -108,8 +109,8 @@ export default class ProductsDashboardFilters extends Component<Signature> {
         ...this.args.filters,
         operatorId: value ?? undefined,
       },
-      false
-    )
+      false,
+    );
   }
 
   @action
@@ -119,8 +120,8 @@ export default class ProductsDashboardFilters extends Component<Signature> {
         ...this.args.filters,
         stringValue: value ?? undefined,
       },
-      true
-    )
+      true,
+    );
   }
 
   @action
@@ -130,8 +131,8 @@ export default class ProductsDashboardFilters extends Component<Signature> {
         ...this.args.filters,
         numberValue: value ?? undefined,
       },
-      true
-    )
+      true,
+    );
   }
 
   @action
@@ -141,8 +142,8 @@ export default class ProductsDashboardFilters extends Component<Signature> {
         ...this.args.filters,
         enumeratedValue: value ?? undefined,
       },
-      true
-    )
+      true,
+    );
   }
 
   @action
@@ -155,8 +156,8 @@ export default class ProductsDashboardFilters extends Component<Signature> {
         numberValue: undefined,
         enumeratedValue: undefined,
       },
-      false
-    )
+      false,
+    );
   }
 
   @action
@@ -166,7 +167,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
         ...this.args.filters,
         ...result.data,
       },
-      false
+      false,
     );
   }
 
@@ -189,7 +190,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
   <template>
     <Form @onSubmit={{this.onFormSubmit}} as |form|>
       <div class="grid grid-cols-4 gap-4 items-end">
-        {{!--
+        {{!
           NOTE: This #each block serves the purpose of using a 'key' in React
           and Svelte. It forces the block to be rerendered whenever the array
           changes, instead of relying on Glimmer's fine-grained reactivity.
@@ -202,7 +203,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
           a property type change.
 
           By forcing this block to be rerendered, that problem is solved.
-        --}}
+        }}
         {{#each (array @filters.propertyId)}}
           <form.Field @name="propertyId" as |field|>
             <field.SingleSelect
@@ -211,6 +212,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
               @items={{this.properties}}
               @onSelectionChange={{this.onPropertyIdChange}}
               @selectedKey={{@filters.propertyId}}
+              data-test-products-dashboard-filters="propertyId"
             />
           </form.Field>
         {{/each}}
@@ -224,15 +226,16 @@ export default class ProductsDashboardFilters extends Component<Signature> {
                 @items={{this.operators}}
                 @onSelectionChange={{this.onOperatorIdChange}}
                 @selectedKey={{@filters.operatorId}}
+                data-test-products-dashboard-filters="operatorId"
               />
             </form.Field>
           {{/if}}
         {{/each}}
 
-        {{!--
+        {{!
           NOTE: Unlike the 'operatorId', it is OK to keep the current value. So
           there is no need to rerender this block.
-        --}}
+        }}
         {{#if @filters.operatorId}}
           {{#if (eq this.selectedProperty.type "enumerated")}}
             <form.Field @name="enumeratedValue" as |field|>
@@ -242,6 +245,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
                 @items={{this.enumeratedItems}}
                 @onSelectionChange={{this.onEnumeratedValueChange}}
                 @selectedKeys={{@filters.enumeratedValue}}
+                data-test-products-dashboard-filters="enumeratedValue"
               />
             </form.Field>
           {{else if (eq this.selectedProperty.type "number")}}
@@ -251,6 +255,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
                 @onInput={{this.onNumberValueChange}}
                 @type="number"
                 @value={{@filters.numberValue}}
+                data-test-products-dashboard-filters="numberValue"
               />
             </form.Field>
           {{else}}
@@ -259,17 +264,19 @@ export default class ProductsDashboardFilters extends Component<Signature> {
                 @label="Insert a value"
                 @onInput={{this.onStringValueChange}}
                 @value={{@filters.stringValue}}
+                data-test-products-dashboard-filters="stringValue"
               />
             </form.Field>
           {{/if}}
         {{/if}}
 
-        <div class=" col-start-4 flex flex-row flex-nowrap justify-end">
+        <div class="col-start-4 flex flex-row flex-nowrap justify-end">
           <Button
             @class="block"
             @onPress={{this.clearFilters}}
             @size="lg"
             @type="reset"
+            data-test-products-dashboard-filters="clear"
           >
             Clear
           </Button>
