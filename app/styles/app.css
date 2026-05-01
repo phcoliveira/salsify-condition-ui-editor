@@ -1,1 +1,7 @@
-/* Ember supports plain CSS out of the box. More info: https://cli.emberjs.com/release/advanced-use/stylesheets/ */
+@import url("tailwindcss");
+
+@plugin "@frontile/theme/plugin/default";
+
+@source '../../node_modules/@frontile';
+
+@custom-variant dark (&:is(.dark *));

@@ -62,6 +62,7 @@
     "ember-cli": "~6.12.0",
     "ember-cli-babel": "^8.3.1",
     "ember-cli-deprecation-workflow": "^3.4.0",
+    "ember-lifeline": "^7.0.0",
     "ember-load-initializers": "^3.0.1",
     "ember-modifier": "^4.3.0",
     "ember-page-title": "^9.0.3",
@@ -70,6 +71,7 @@
     "ember-sinon-qunit": "^7.5.0",
     "ember-source": "~6.12.0",
     "ember-template-lint": "^7.9.3",
+    "ember-truth-helpers": "^5.0.0",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-ember": "^12.7.5",
@@ -93,5 +95,14 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "@frontile/theme": "^0.18.0-alpha.5",
+    "@tailwindcss/postcss": "^4.2.4",
+    "frontile": "^0.18.0-alpha.5",
+    "postcss": "^8.5.12",
+    "postcss-loader": "^8.2.1",
+    "tailwindcss": "^4.2.4",
+    "valibot": "^1.3.1"
   }
 }
