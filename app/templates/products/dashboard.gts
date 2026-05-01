@@ -2,7 +2,7 @@ import type { TOC } from '@ember/component/template-only';
 import { pageTitle } from 'ember-page-title';
 import type { Model } from 'condition-ui-editor/routes/products/dashboard';
 import type Controller from 'condition-ui-editor/controllers/products/dashboard';
-import ProductsDashboardFilters from 'condition-ui-editor/components/products/dashboard-filters.gts';
+import DashboardFilters from 'condition-ui-editor/components/products/dashboard-filters.gts';
 
 interface DashboardSignature {
   Args: {
@@ -14,11 +14,13 @@ interface DashboardSignature {
 <template>
   {{pageTitle "Dashboard"}}
 
-  <ProductsDashboardFilters
+  <DashboardFilters
     @filters={{@controller.filters}}
     @onChange={{@controller.onFiltersChange}}
     @properties={{@model.properties}}
   />
 
-  {{outlet}}
+  <div class="py-6">
+    {{outlet}}
+  </div>
 </template> satisfies TOC<DashboardSignature>;

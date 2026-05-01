@@ -189,7 +189,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
 
   <template>
     <Form @onSubmit={{this.onFormSubmit}} as |form|>
-      <div class="grid grid-cols-4 gap-4 items-end">
+      <div class="grid grid-cols-4 gap-4 items-end bg-gray-200 p-6">
         {{!
           NOTE: This #each block serves the purpose of using a 'key' in React
           and Svelte. It forces the block to be rerendered whenever the array
