@@ -1,4 +1,11 @@
-import { click, currentURL, fillIn, findAll, visit, waitFor } from '@ember/test-helpers';
+import {
+  click,
+  currentURL,
+  fillIn,
+  findAll,
+  visit,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'condition-ui-editor/tests/helpers';
 import { module, test } from 'qunit';
 
@@ -14,7 +21,7 @@ const po = {
     column: '[data-test-products-products-table="column"]',
     row: '[data-test-products-products-table="row"]',
   },
-}
+};
 
 module('Acceptance | products/filtering products', function (hooks) {
   setupApplicationTest(hooks);
@@ -64,13 +71,13 @@ module('Acceptance | products/filtering products', function (hooks) {
     assert.true(urlStringValueParam.searchParams.has('string', 're'));
 
     // Table is rendered
-    await waitFor(po.table.row)
+    await waitFor(po.table.row);
 
     assert.dom(po.table.row).exists({ count: 1 });
 
     assert
       .dom(findAll(po.table.cell)[1])
       .hasAttribute('data-property-id', '1')
-      .hasText('grey')
+      .hasText('grey');
   });
 });
