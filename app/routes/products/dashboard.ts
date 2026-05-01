@@ -1,6 +1,14 @@
 import Route from '@ember/routing/route';
 import { service, type Registry } from '@ember/service';
 
+export type Params = {
+  operatorId: string | undefined;
+  propertyId: number | undefined;
+  stringValue: string | undefined;
+  numberValue: number | undefined;
+  enumeratedValue: string[] | undefined;
+};
+
 export type Model = Readonly<{
   properties: ReturnType<Registry['datastore']['getAllProperties']>;
 }>;
@@ -8,6 +16,49 @@ export type Model = Readonly<{
 export default class ProductsDashboardRoute extends Route<Model> {
   @service()
   declare readonly datastore: Registry['datastore'];
+
+  /**
+   * I intentionally used query params as a means to preserve the state of the
+   * filter, which would enable users to simply share a URL for seeing the same
+   * dashboard in other devices.
+   *
+   * The usage of the option `replace` is a personal UX decision. Because of
+   * this, the user can alter the filter many times without pushing a new item
+   * to the HistoryState. In other words, pressing the back button of the
+   * browser will lead the user right back to the landing page because each
+   * new filter replaces the previous one.
+   *
+   * Too often designers and PMs do not think about that while creating new
+   * features. In a working scenario, I would ask them to stay for 5 minutes
+   * after the daily standup to discuss this decision.
+   */
+  queryParams = {
+    operatorId: {
+      refreshModel: false,
+      replace: true,
+      as: 'operator',
+    },
+    propertyId: {
+      refreshModel: false,
+      replace: true,
+      as: 'property',
+    },
+    stringValue: {
+      refreshModel: false,
+      replace: true,
+      as: 'string',
+    },
+    numberValue: {
+      refreshModel: false,
+      replace: true,
+      as: 'number',
+    },
+    enumeratedValue: {
+      refreshModel: false,
+      replace: true,
+      as: 'enumerated',
+    },
+  };
 
   /**
    * According to Claude, the average number of properties varies between 80 and
@@ -24,7 +75,7 @@ export default class ProductsDashboardRoute extends Route<Model> {
    * loaded.
    *
    * Furthermore, this model does not need to, and will not, be refreshed when
-   * its child route "index" is refreshed due to a change in its query params.
+   * its child route "index" is refreshed.
    *
    * Having this dashboard route separated from its child index route might seem
    * to be over engineering, but it prevents these properties from being fetched
