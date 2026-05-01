@@ -1,4 +1,5 @@
 import Service from '@ember/service';
+import type { Params } from 'condition-ui-editor/routes/products/dashboard';
 import type { Operator, Property } from 'condition-ui-editor/types/datastore';
 
 export const operatorsByType: Record<Property['type'], Operator['id'][]> = {
@@ -32,12 +33,77 @@ export default class DatastoreService extends Service {
     return this.allProperties;
   }
 
-  /**
-   * TODO: implement filtering and sorting mechanism.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getProducts(search: unknown) {
-    return this.allProducts;
+  getProducts(params: Params) {
+    const {
+      propertyId,
+      operatorId,
+      stringValue,
+      numberValue,
+      enumeratedValue,
+    } = params;
+
+    if (propertyId === undefined || operatorId === undefined) {
+      return this.allProducts;
+    }
+
+    return this.allProducts.filter((product) => {
+      const propertyValue = product.property_values.find(
+        (propertyValue) => propertyValue.property_id === propertyId,
+      );
+
+      switch (operatorId) {
+        case 'any':
+          return propertyValue !== undefined;
+        case 'none':
+          return propertyValue === undefined;
+        case 'equals':
+          if (propertyValue === undefined) return false;
+
+          if (enumeratedValue !== undefined)
+            return enumeratedValue.includes(String(propertyValue.value));
+
+          if (numberValue !== undefined)
+            return propertyValue.value === numberValue;
+
+          return (
+            stringValue !== undefined && propertyValue.value === stringValue
+          );
+        case 'contains':
+          return (
+            propertyValue !== undefined &&
+            stringValue !== undefined &&
+            String(propertyValue.value)
+              .toLowerCase()
+              .includes(stringValue.toLowerCase())
+          );
+        case 'greater_than':
+          return (
+            propertyValue !== undefined &&
+            numberValue !== undefined &&
+            Number(propertyValue.value) > numberValue
+          );
+        case 'less_than':
+          return (
+            propertyValue !== undefined &&
+            numberValue !== undefined &&
+            Number(propertyValue.value) < numberValue
+          );
+        case 'in':
+          if (propertyValue === undefined) return false;
+
+          if (enumeratedValue !== undefined)
+            return enumeratedValue.includes(String(propertyValue.value));
+
+          if (numberValue !== undefined)
+            return propertyValue.value === numberValue;
+
+          return (
+            stringValue !== undefined && propertyValue.value === stringValue
+          );
+        default:
+          return false;
+      }
+    });
   }
 
   getOperators(type: Property['type']) {
