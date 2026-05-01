@@ -35,7 +35,7 @@ interface ProductsSignature {
 <template>
   {{pageTitle "Products"}}
 
-  <p>Products layout</p>
+  <h1 class="text-2xl text-accent py-6">Products</h1>
 
   {{outlet}}
 </template> satisfies TOC<ProductsSignature>;

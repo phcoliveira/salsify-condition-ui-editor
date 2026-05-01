@@ -16,9 +16,7 @@ interface ApplicationSignature {
 <template>
   {{pageTitle "Condition UI Editor"}}
 
-  <main>
-    <p>Application layout</p>
-
+  <main class="min-w-2xl max-w-4/5 mx-auto">
     {{outlet}}
   </main>
 </template> satisfies TOC<ApplicationSignature>;
