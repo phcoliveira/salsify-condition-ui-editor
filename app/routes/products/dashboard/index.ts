@@ -18,7 +18,7 @@ export default class ProductsDashboardIndexRoute extends Route<Model> {
 
   async model() {
     await new Promise((resolve) =>
-      setTimeout(resolve, Ember.testing ? 10 : 1000),
+      setTimeout(resolve, Ember.testing ? 1 : 500),
     );
 
     const params = this.paramsFor('products.dashboard') as DashboardParams;
