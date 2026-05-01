@@ -4,7 +4,7 @@ import { service, type Registry } from '@ember/service';
 import Component from '@glimmer/component';
 import type { Property } from 'condition-ui-editor/types/datastore';
 import { eq } from 'ember-truth-helpers';
-import { Form, type FormResultData } from 'frontile';
+import { Button, Form, type FormResultData } from 'frontile';
 import * as v from 'valibot';
 
 const filtersFormSchema = v.object({
@@ -99,7 +99,7 @@ export default class ProductsDashboardFilters extends Component<Signature> {
   /**
    * Changing the operator, on the other hand, does not cause the same
    * strangeness as changing the property. Because of this, it is reasonable to
-   * keep the current propertyValue, if available.
+   * keep the current value downstream, if available.
    */
   @action
   onOperatorIdChange(value: string | null) {
@@ -188,76 +188,93 @@ export default class ProductsDashboardFilters extends Component<Signature> {
 
   <template>
     <Form @onSubmit={{this.onFormSubmit}} as |form|>
-      <form.Field @name="propertyId" as |field|>
-        <field.SingleSelect
-          @allowEmpty={{false}}
-          @label="Select a property"
-          @items={{this.properties}}
-          @onSelectionChange={{this.onPropertyIdChange}}
-          @selectedKey={{@filters.propertyId}}
-        />
-      </form.Field>
+      <div class="grid grid-cols-4 gap-4 items-end">
+        {{!--
+          NOTE: This #each block serves the purpose of using a 'key' in React
+          and Svelte. It forces the block to be rerendered whenever the array
+          changes, instead of relying on Glimmer's fine-grained reactivity.
 
-      {{!--
-        NOTE: This #each block serves the purpose of using a 'key' in React and
-        Svelte. It forces the block to be rerendered whenever the array changes,
-        instead of relying on Glimmer's fine-grained reactivity.
+          This is likely a problem with Frontile itself. Setting a property to
+          undefined does trigger the desired behaviour of updating the URL.
 
-        This is likely a problem with Frontile itself. When the 'propertyId'
-        changes, its respective action sets the 'operatorId' to 'undefined',
-        which is the desired behaviour that can be verified on the URL.
+          However, the component 'field.SingleSelect' does not update properly,
+          preserving the last option selected, even when it is unavailable due to
+          a property type change.
 
-        However, the component 'field.SingleSelect' does not update properly,
-        preserving the last option selected, even when it is unavailable due to
-        a property type change.
-
-        By forcing this block to be rerendered, that problem is solved.
-      --}}
-      {{#each (array @filters.propertyId)}}
-        <form.Field @name="operatorId" as |field|>
-          <field.SingleSelect
-            @allowEmpty={{false}}
-            @label="Select an operator"
-            @items={{this.operators}}
-            @onSelectionChange={{this.onOperatorIdChange}}
-            @selectedKey={{@filters.operatorId}}
-          />
-        </form.Field>
-      {{/each}}
-
-      {{!--
-        NOTE: Unlike the 'operatorId', it is OK to keep the current value. So
-        there is no need to rerender this block.
-      --}}
-      {{#if @filters.operatorId}}
-        {{#if (eq this.selectedProperty.type "enumerated")}}
-          <form.Field @name="enumeratedValue" as |field|>
-            <field.MultiSelect
-              @label="Select one or more values"
-              @items={{this.enumeratedItems}}
-              @onSelectionChange={{this.onEnumeratedValueChange}}
-              @selectedKeys={{@filters.enumeratedValue}}
+          By forcing this block to be rerendered, that problem is solved.
+        --}}
+        {{#each (array @filters.propertyId)}}
+          <form.Field @name="propertyId" as |field|>
+            <field.SingleSelect
+              @allowEmpty={{true}}
+              @label="Select a property"
+              @items={{this.properties}}
+              @onSelectionChange={{this.onPropertyIdChange}}
+              @selectedKey={{@filters.propertyId}}
             />
           </form.Field>
-        {{else if (eq this.selectedProperty.type "number")}}
-          <form.Field @name="numberValue" as |field|>
-            <field.Input
-              @label="Insert a number"
-              @onInput={{this.onNumberValueChange}}
-              @type="number"
-              @value={{@filters.numberValue}}
-            />
-          </form.Field>
-        {{else}}
-          <form.Field @name="stringValue" as |field|>
-            <field.Input
-              @label="Insert a value"
-              @onInput={{this.onStringValueChange}}
-              @value={{@filters.stringValue}}
-            />
-          </form.Field>
+        {{/each}}
+
+        {{#each (array @filters.operatorId)}}
+          {{#if @filters.propertyId}}
+            <form.Field @name="operatorId" as |field|>
+              <field.SingleSelect
+                @allowEmpty={{false}}
+                @label="Select an operator"
+                @items={{this.operators}}
+                @onSelectionChange={{this.onOperatorIdChange}}
+                @selectedKey={{@filters.operatorId}}
+              />
+            </form.Field>
+          {{/if}}
+        {{/each}}
+
+        {{!--
+          NOTE: Unlike the 'operatorId', it is OK to keep the current value. So
+          there is no need to rerender this block.
+        --}}
+        {{#if @filters.operatorId}}
+          {{#if (eq this.selectedProperty.type "enumerated")}}
+            <form.Field @name="enumeratedValue" as |field|>
+              <field.MultiSelect
+                @allowEmpty={{true}}
+                @label="Select one or more values"
+                @items={{this.enumeratedItems}}
+                @onSelectionChange={{this.onEnumeratedValueChange}}
+                @selectedKeys={{@filters.enumeratedValue}}
+              />
+            </form.Field>
+          {{else if (eq this.selectedProperty.type "number")}}
+            <form.Field @name="numberValue" as |field|>
+              <field.Input
+                @label="Insert a number"
+                @onInput={{this.onNumberValueChange}}
+                @type="number"
+                @value={{@filters.numberValue}}
+              />
+            </form.Field>
+          {{else}}
+            <form.Field @name="stringValue" as |field|>
+              <field.Input
+                @label="Insert a value"
+                @onInput={{this.onStringValueChange}}
+                @value={{@filters.stringValue}}
+              />
+            </form.Field>
+          {{/if}}
         {{/if}}
-      {{/if}}
+
+        <div class=" col-start-4 flex flex-row flex-nowrap justify-end">
+          <Button
+            @class="block"
+            @onPress={{this.clearFilters}}
+            @size="lg"
+            @type="reset"
+          >
+            Clear
+          </Button>
+        </div>
+      </div>
     </Form>
   </template>
 }
