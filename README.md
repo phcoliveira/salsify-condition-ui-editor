@@ -2,6 +2,8 @@
 
 The application is fairly robust. I didn't want to do just the bare minimum, so I included other functionalities to demonstrate my familiarity with Ember.Js.
 
+[See its production build here.](https://morning-disk-a527.ludiful.workers.dev)
+
 ## Routing
 
 I used Ember's telescopic routing for arranging the routes in a domain-driven, RESTful way. I wrote many comments explaining my decisions.
